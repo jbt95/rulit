@@ -1,0 +1,41 @@
+{
+  "name": "rulit",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "rulit-ui": "dist/cli/ui.js"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json && node scripts/copy-ui-template.mjs",
+    "format": "prettier -w .",
+    "format:check": "prettier -c .",
+    "ci": "pnpm run typecheck && pnpm run test && pnpm run test:types && pnpm run format:check",
+    "test:coverage": "vitest run --coverage",
+    "test:types": "pnpm run build && tsd",
+    "ui": "tsx src/cli/ui.ts",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run"
+  },
+  "tsd": {
+    "directory": "test-d"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.23.0",
+  "devDependencies": {
+    "@types/node": "^25.0.9",
+    "@vitest/coverage-v8": "^4.0.17",
+    "prettier": "^3.8.0",
+    "tsd": "^0.33.0",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.17"
+  },
+  "dependencies": {
+    "handlebars": "^4.7.8",
+    "zod": "^4.3.5"
+  }
+}
