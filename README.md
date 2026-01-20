@@ -17,7 +17,22 @@ keeps it type-safe, and produces explainable traces so you can audit outcomes.
 Imagine a typical insurance discount system. In traditional code, it often looks like this:
 
 ```ts
-function calculateDiscount(user, cart) {
+type User = {
+  isPremium: boolean;
+  age: number;
+  region: string;
+};
+
+type Item = {
+  category: string;
+};
+
+type Cart = {
+  total: number;
+  items: Item[];
+};
+
+function calculateDiscount(user: User, cart: Cart) {
   let discount = 0;
 
   if (user.isPremium) {
@@ -50,6 +65,22 @@ With Rulit, the same logic becomes declarative, type-safe, and **explainable**.
 
 ```ts
 import { Rules } from "rulit";
+
+interface Facts {
+  user: {
+    isPremium: boolean;
+    age: number;
+    region: string;
+  };
+  cart: {
+    total: number;
+    items: { category: string }[];
+  };
+}
+
+interface Effects {
+  discount: number;
+}
 
 const discountRules = Rules.ruleset<Facts, Effects>("discounts")
   .rule("Premium Senior")
@@ -88,6 +119,14 @@ const discountRules = Rules.ruleset<Facts, Effects>("discounts")
   })
   .end()
   .build();
+
+const facts: Facts = {
+  user: { isPremium: false, age: 20, region: "EU" },
+  cart: {
+    total: 600,
+    items: [{ category: "books" }],
+  },
+};
 
 const { effects, trace } = discountRules.run(facts);
 
@@ -214,7 +253,10 @@ result.effects.decision; // "approve"
 Always provide a factory that returns a new object so runs don't share state.
 
 ```ts
-const rs = Rules.ruleset<Facts, Effects>("rs").defaultEffects(() => ({
+interface Effects {
+  flags: string[];
+}
+const rs = Rules.ruleset<any, Effects>("rs").defaultEffects(() => ({
   flags: [],
 }));
 ```
@@ -254,6 +296,13 @@ to group rules by feature, environment, or business segment, then run only the
 relevant subset with `includeTags` / `excludeTags`.
 
 ```ts
+interface Facts {
+  user: { age: number; tags: string[] };
+}
+interface Effects {
+  flags: string[];
+}
+
 const rs = Rules.ruleset<Facts, Effects>("tagged")
   .defaultEffects(() => ({ flags: [] }))
   .rule("vip")
@@ -262,6 +311,7 @@ const rs = Rules.ruleset<Facts, Effects>("tagged")
   .then(({ effects }) => effects.flags.push("vip"))
   .end();
 
+const facts: Facts = { user: { age: 20, tags: [] } };
 rs.compile().run({ facts, includeTags: ["vip"] });
 ```
 
@@ -271,6 +321,13 @@ Every rule produces a `RuleTrace` with condition evaluations, match status, and 
 You can read raw trace data or use `result.explain()` for a human-readable summary.
 
 ```ts
+interface Facts {
+  user: { age: number; tags: string[] };
+}
+interface Effects {
+  flags: string[];
+}
+
 const rs = Rules.ruleset<Facts, Effects>("trace-demo")
   .defaultEffects(() => ({ flags: [] }))
   .rule("adult")
@@ -287,7 +344,8 @@ const rs = Rules.ruleset<Facts, Effects>("trace-demo")
   })
   .end();
 
-const result = rs.compile().run({ facts: { user: { age: 20, tags: [] } } });
+const facts: Facts = { user: { age: 20, tags: [] } };
+const result = rs.compile().run({ facts });
 
 result.trace[0]; // structured trace data
 result.explain(); // formatted explanation
