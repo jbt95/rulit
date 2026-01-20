@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="static/ui.png" alt="Rulit UI screenshot" width="720" style="max-width: 100%; height: auto;" />
+</p>
+
 # Rulit
 
 Type-safe rules engine with a fluent builder API and explainable traces.
@@ -7,6 +11,21 @@ Type-safe rules engine with a fluent builder API and explainable traces.
 When business rules live as scattered `if/else` chains, they become hard to read,
 hard to change, and risky to refactor. This library centralizes decision logic,
 keeps it type-safe, and produces explainable traces so you can audit outcomes.
+
+## When to use
+
+Use Rulit when you need:
+
+- Complex decision logic that changes frequently.
+- Transparent, explainable outcomes for audit or support.
+- Typed facts/effects to make refactors safe.
+- A single, reusable rules engine shared across services.
+
+You may not need it when:
+
+- Logic is trivial and unlikely to grow.
+- Performance requires a specialized rule engine or Rete.
+- You only need a static feature flag system.
 
 ## Features
 
@@ -20,6 +39,12 @@ keeps it type-safe, and produces explainable traces so you can audit outcomes.
 - Validation hooks and Zod helpers.
 - Async rule actions with `thenAsync()` + `runAsync()`.
 - Optional OpenTelemetry adapter for rule execution spans.
+
+## At a glance
+
+- Define rules with strong typing and composable conditions.
+- Run engines deterministically and capture explainable traces.
+- Visualize rulesets with Mermaid + inspect trace playback in the UI.
 
 ## Install
 
@@ -65,9 +90,10 @@ result.explain();
 - `priority(n)` controls ordering: higher numbers run first; ties use insertion order.
 - `when(...)` defines conditions for the rule. If omitted, the rule always matches.
 - `then(...)` defines what happens when a rule matches; it can mutate effects or return a patch.
+- `thenAsync(...)` defines async effects; use `runAsync()` to execute them.
 - `end()` finalizes the rule and returns to the ruleset builder.
 - `defaultEffects(fn)` creates a fresh effects object for each run.
-- `compile()` freezes the ruleset into an engine; `run()` executes it on facts.
+- `compile()` freezes the ruleset into an engine; `run()` or `runAsync()` executes it on facts.
 
 ### What is an effect?
 
@@ -135,6 +161,7 @@ ruleset
 - `mergeStrategy`: `"assign"` or `"deep"` for returned patches.
 - `includeTags` / `excludeTags`: rule filtering by tags.
 - `rollbackOnError`: keep previous effects when a rule throws.
+- Use `runAsync()` when any rule action is async.
 - Rule actions may return a partial effects patch, merged by `mergeStrategy`.
 
 ### What are tags?
@@ -255,7 +282,7 @@ The `--load` option imports a module that defines your rulesets so the registry 
 
 The UI includes Mermaid diagrams, JSON graph output, and trace playback with run inputs.
 Trace playback appears after you execute a compiled engine; each run captures the input facts,
-fired rules, and per-rule condition traces.
+fired rules, and per-rule condition traces in expandable rows.
 
 You can also load rules via env vars:
 
