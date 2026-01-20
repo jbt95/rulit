@@ -622,3 +622,77 @@ const result = await rs.compile().runAsync({ facts });
 - `pnpm run test` - Run unit tests (Vitest)
 - `pnpm run format` - Format with Prettier
 - `pnpm run ci` - Typecheck + tests + format check
+
+## API
+
+| Category | Member | Description |
+| --- | --- | --- |
+| Rules | `Rules.ruleset` | Create a new ruleset builder. |
+| Rules | `Rules.condition` | Build a condition with optional trace metadata. |
+| Rules | `Rules.field` | Create a typed field accessor for facts. |
+| Rules | `Rules.op` | Boolean/composition operators and operator registry. |
+| Rules | `Rules.registry` | In-memory ruleset registry and trace store. |
+| Rules | `Rules.zodFacts` | Wrap a Zod schema as a facts validator. |
+| Rules | `Rules.zodEffects` | Wrap a Zod schema as an effects validator. |
+| Rules | `Rules.otel` | OpenTelemetry helpers container. |
+| Rules | `Rules.otel.createAdapter` | Build a telemetry adapter from an OTEL tracer. |
+| Rules.op | `Rules.op.and` | Combine conditions with logical AND. |
+| Rules.op | `Rules.op.or` | Combine conditions with logical OR. |
+| Rules.op | `Rules.op.not` | Negate a condition. |
+| Rules.op | `Rules.op.custom` | Create a custom condition wrapper. |
+| Rules.op | `Rules.op.register` | Register a named operator factory. |
+| Rules.op | `Rules.op.use` | Build a condition using a registered operator. |
+| Rules.op | `Rules.op.has` | Check if an operator name is registered. |
+| Rules.op | `Rules.op.list` | List registered operator names. |
+| Rules.registry | `Rules.registry.register` | Register a ruleset in the registry. |
+| Rules.registry | `Rules.registry.list` | List registered rulesets. |
+| Rules.registry | `Rules.registry.getGraph` | Get a ruleset graph by id or name. |
+| Rules.registry | `Rules.registry.getMermaid` | Get Mermaid output by id or name. |
+| Rules.registry | `Rules.registry.recordTrace` | Record a trace run for a ruleset. |
+| Rules.registry | `Rules.registry.listTraces` | List trace runs for a ruleset. |
+| Rules.registry | `Rules.registry.getTrace` | Get a specific trace run by id. |
+| Rules.registry | `Rules.registry.clear` | Clear the registry (useful in tests). |
+| RulesetBuilder | `defaultEffects` | Set the default effects factory (required before compile). |
+| RulesetBuilder | `validateFacts` | Register a facts validation hook. |
+| RulesetBuilder | `validateEffects` | Register an effects validation hook. |
+| RulesetBuilder | `telemetry` | Attach a telemetry adapter for spans. |
+| RulesetBuilder | `rule` | Start building a new rule. |
+| RulesetBuilder | `field` | Create a field helper bound to the ruleset facts type. |
+| RulesetBuilder | `graph` | Export the ruleset graph structure. |
+| RulesetBuilder | `toMermaid` | Export a Mermaid flowchart string. |
+| RulesetBuilder | `compile` | Freeze the ruleset into an executable engine. |
+| RuleBuilder | `priority` | Set rule priority (higher runs first). |
+| RuleBuilder | `when` | Attach conditions to the rule. |
+| RuleBuilder | `meta` | Set metadata (tags, version, reason, etc.). |
+| RuleBuilder | `tags` | Set rule tags for filtering. |
+| RuleBuilder | `description` | Set a human-readable description. |
+| RuleBuilder | `version` | Set a version string for the rule. |
+| RuleBuilder | `reasonCode` | Set a reason code used in traces. |
+| RuleBuilder | `enabled` | Enable or disable the rule. |
+| RuleBuilder | `then` | Define a synchronous rule action. |
+| RuleBuilder | `thenAsync` | Define an async rule action. |
+| RuleBuilder | `end` | Finalize the rule and return to the ruleset. |
+| Engine | `run` | Execute rules synchronously against facts. |
+| Engine | `runAsync` | Execute rules asynchronously against facts. |
+| RunResult | `effects` | Final effects object after execution. |
+| RunResult | `fired` | List of rule ids that fired. |
+| RunResult | `trace` | Per-rule trace data. |
+| RunResult | `explain` | Render a human-readable explanation string. |
+| Field | `path` | The path string for the accessor. |
+| Field | `get` | Read the value at the field path. |
+| Field | `eq` | Condition for strict equality. |
+| Field | `in` | Condition for membership in a list. |
+| Field | `gt` | Condition for greater than (number). |
+| Field | `gte` | Condition for greater than or equal (number). |
+| Field | `lt` | Condition for less than (number). |
+| Field | `lte` | Condition for less than or equal (number). |
+| Field | `between` | Condition for numeric range inclusion. |
+| Field | `contains` | Condition for string/array containment. |
+| Field | `startsWith` | Condition for string prefix match. |
+| Field | `matches` | Condition for regex match. |
+| Field | `isTrue` | Condition for boolean true. |
+| Field | `isFalse` | Condition for boolean false. |
+| Field | `before` | Condition for date before another. |
+| Field | `after` | Condition for date after another. |
+| Field | `any` | Condition when any array item passes predicate. |
+| Field | `all` | Condition when all array items pass predicate. |
