@@ -282,54 +282,6 @@ const rs = Rules.ruleset<Facts, Effects>("async")
 const result = await rs.compile().runAsync({ facts });
 ```
 
-#### Before / After: async service integration
-
-Before (scattered async checks):
-
-```ts
-async function decide(facts: Facts) {
-  const effects: Effects = { flags: [], decision: "review" };
-
-  if (facts.user.riskScore < 20 && (await isVip(facts.user.id))) {
-    effects.flags.push("trusted-vip");
-    effects.decision = "approve";
-  }
-
-  if (await hasChargebacks(facts.user.id)) {
-    effects.flags.push("chargebacks");
-    effects.decision = "deny";
-  }
-
-  return effects;
-}
-```
-
-After (rules + async effects):
-
-```ts
-const rs = Rules.ruleset<Facts, Effects>("eligibility")
-  .defaultEffects(() => ({ flags: [], decision: "review" }))
-  .rule("trusted-vip")
-  .when(factsField("user.riskScore").lt(20))
-  .thenAsync(async ({ facts, effects }) => {
-    if (await isVip(facts.user.id)) {
-      effects.flags.push("trusted-vip");
-      effects.decision = "approve";
-    }
-  })
-  .end()
-  .rule("chargebacks")
-  .thenAsync(async ({ facts, effects }) => {
-    if (await hasChargebacks(facts.user.id)) {
-      effects.flags.push("chargebacks");
-      effects.decision = "deny";
-    }
-  })
-  .end();
-
-const result = await rs.compile().runAsync({ facts });
-```
-
 ### OpenTelemetry
 
 Attach an OpenTelemetry-compatible adapter to emit spans for runs, rules, and conditions:
@@ -586,6 +538,54 @@ export class Order {
     this.status = result.effects.status;
   }
 }
+```
+
+### Before / After: async service integration
+
+Before (scattered async checks):
+
+```ts
+async function decide(facts: Facts) {
+  const effects: Effects = { flags: [], decision: "review" };
+
+  if (facts.user.riskScore < 20 && (await isVip(facts.user.id))) {
+    effects.flags.push("trusted-vip");
+    effects.decision = "approve";
+  }
+
+  if (await hasChargebacks(facts.user.id)) {
+    effects.flags.push("chargebacks");
+    effects.decision = "deny";
+  }
+
+  return effects;
+}
+```
+
+After (rules + async effects):
+
+```ts
+const rs = Rules.ruleset<Facts, Effects>("eligibility")
+  .defaultEffects(() => ({ flags: [], decision: "review" }))
+  .rule("trusted-vip")
+  .when(factsField("user.riskScore").lt(20))
+  .thenAsync(async ({ facts, effects }) => {
+    if (await isVip(facts.user.id)) {
+      effects.flags.push("trusted-vip");
+      effects.decision = "approve";
+    }
+  })
+  .end()
+  .rule("chargebacks")
+  .thenAsync(async ({ facts, effects }) => {
+    if (await hasChargebacks(facts.user.id)) {
+      effects.flags.push("chargebacks");
+      effects.decision = "deny";
+    }
+  })
+  .end();
+
+const result = await rs.compile().runAsync({ facts });
 ```
 
 ## Scripts
