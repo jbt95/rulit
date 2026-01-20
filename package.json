@@ -1,35 +1,61 @@
 {
   "name": "rulit",
   "version": "1.0.0",
-  "description": "",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "description": "Type-safe rules engine with a fluent builder API and explainable traces.",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
   "bin": {
     "rulit-ui": "dist/cli/ui.js"
   },
   "scripts": {
-    "build": "tsc -p tsconfig.json && node scripts/copy-ui-template.mjs",
+    "build": "tsup",
     "format": "prettier -w .",
     "format:check": "prettier -c .",
-    "ci": "pnpm run typecheck && pnpm run test && pnpm run test:types && pnpm run format:check",
+    "ci": "pnpm run typecheck && pnpm run test && pnpm run format:check",
     "test:coverage": "vitest run --coverage",
-    "test:types": "pnpm run build && tsd",
     "ui": "tsx src/cli/ui.ts",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "test": "vitest run"
+    "test": "vitest run",
+    "prepublishOnly": "pnpm run ci && pnpm run build",
+    "release": "pnpm publish"
   },
-  "tsd": {
-    "directory": "test-d"
+  "keywords": [
+    "rules-engine",
+    "business-rules",
+    "type-safe",
+    "typescript",
+    "fluent-api",
+    "explainable",
+    "traces",
+    "audit"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jbt95/rulit.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jbt95/rulit/issues"
+  },
+  "homepage": "https://github.com/jbt95/rulit#readme",
+  "files": [
+    "dist"
+  ],
+  "author": "Jordi Bermejo <jordi.dev95@gmail.com>",
+  "license": "MIT",
   "packageManager": "pnpm@10.23.0",
   "devDependencies": {
     "@types/node": "^25.0.9",
     "@vitest/coverage-v8": "^4.0.17",
     "prettier": "^3.8.0",
-    "tsd": "^0.33.0",
+    "tsup": "^8.5.1",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3",
     "vitest": "^4.0.17"

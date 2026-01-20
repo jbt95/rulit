@@ -1,4 +1,3 @@
-<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -13,20 +12,14 @@
     />
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            fontFamily: {
-              display: ["Manrope", "ui-sans-serif", "system-ui"],
-              mono: ["JetBrains Mono", "ui-monospace", "SFMono-Regular", "Menlo", "monospace"],
-            },
-          },
-        },
-      };
+      tailwind.config = { theme: { extend: { fontFamily: { display: ["Manrope", "ui-sans-serif",
+      "system-ui"], mono: ["JetBrains Mono", "ui-monospace", "SFMono-Regular", "Menlo",
+      "monospace"], }, }, }, };
     </script>
     <style>
       .grid-surface {
-        background-image: linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+        background-image:
+          linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
           linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
         background-size: 48px 48px;
       }
@@ -58,7 +51,9 @@
         class="h-fit rounded-2xl border border-neutral-800/80 bg-neutral-950/60 p-5 shadow-[0_20px_60px_rgba(0,0,0,0.4)] backdrop-blur sm:sticky sm:top-6"
       >
         <div class="flex items-center justify-between">
-          <h2 class="text-xs font-semibold uppercase tracking-[0.35em] text-neutral-400">Rulesets</h2>
+          <h2
+            class="text-xs font-semibold uppercase tracking-[0.35em] text-neutral-400"
+          >Rulesets</h2>
           <span
             class="rounded-full border border-neutral-700/80 bg-neutral-950/80 px-2 py-0.5 text-[11px] text-neutral-300"
           >
@@ -84,7 +79,9 @@
               </li>
             {{/each}}
           {{else}}
-            <li class="rounded-xl border border-dashed border-neutral-800 p-3 text-xs text-neutral-500">
+            <li
+              class="rounded-xl border border-dashed border-neutral-800 p-3 text-xs text-neutral-500"
+            >
               No rulesets found.
             </li>
           {{/if}}
@@ -146,14 +143,20 @@
                           data-trace-row
                           data-trace="{{traceEncoded}}"
                         >
-                          <summary class="grid cursor-pointer grid-cols-[1fr_160px_160px_100px] items-center gap-3 text-xs text-neutral-200">
+                          <summary
+                            class="grid cursor-pointer grid-cols-[1fr_160px_160px_100px] items-center gap-3 text-xs text-neutral-200"
+                          >
                             <div>
                               <div class="text-sm font-semibold text-neutral-100">{{id}}</div>
                               <div class="text-[11px] text-neutral-500">Trace run</div>
                             </div>
-                            <div class="text-center text-[11px] text-neutral-400">{{createdAt}}</div>
-                            <div class="text-center text-[11px] text-neutral-400">{{firedCount}} fired</div>
-                            <div class="text-center text-[11px] text-neutral-400">{{matchedCount}} matched</div>
+                            <div
+                              class="text-center text-[11px] text-neutral-400"
+                            >{{createdAt}}</div>
+                            <div class="text-center text-[11px] text-neutral-400">{{firedCount}}
+                              fired</div>
+                            <div class="text-center text-[11px] text-neutral-400">{{matchedCount}}
+                              matched</div>
                           </summary>
                           <div class="mt-4 space-y-4" data-trace-row-body></div>
                         </details>
@@ -171,7 +174,9 @@
             </section>
           {{/each}}
         {{else}}
-          <p class="rounded-xl border border-dashed border-neutral-800 p-6 text-sm text-neutral-500">
+          <p
+            class="rounded-xl border border-dashed border-neutral-800 p-6 text-sm text-neutral-500"
+          >
             No rulesets found.
           </p>
         {{/if}}
@@ -195,285 +200,114 @@
             Close
           </button>
         </div>
-        <div id="overlay-mermaid" class="mt-4 rounded-2xl border border-neutral-800 bg-neutral-950/80 p-4"></div>
+        <div
+          id="overlay-mermaid"
+          class="mt-4 rounded-2xl border border-neutral-800 bg-neutral-950/80 p-4"
+        ></div>
       </div>
     </div>
     <script type="module">
       import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
-      mermaid.initialize({ startOnLoad: true, theme: "dark" });
-      const search = document.getElementById("search");
-      const nav = document.getElementById("nav");
-      const cards = document.getElementById("cards");
-      const overlay = document.getElementById("overlay");
-      const overlayClose = document.getElementById("overlay-close");
-      const overlayMermaid = document.getElementById("overlay-mermaid");
-      const filter = () => {
-        const value = (search?.value || "").toLowerCase();
-        const links = nav?.querySelectorAll("a") || [];
-        const sections = cards?.querySelectorAll("section") || [];
-        links.forEach((link) => {
-          const text = link.textContent?.toLowerCase() || "";
-          const show = text.includes(value);
-          link.parentElement.style.display = show ? "" : "none";
-        });
-        sections.forEach((section) => {
-          const text = section.textContent?.toLowerCase() || "";
-          section.style.display = text.includes(value) ? "" : "none";
-        });
-      };
-      if (search) {
-        search.addEventListener("input", filter);
-      }
-      const showOverlayWithSvg = (svgMarkup) => {
-        if (!overlay || !overlayMermaid) {
-          return;
-        }
-        overlayMermaid.innerHTML = svgMarkup;
-        overlay.classList.remove("hidden");
-        overlay.setAttribute("aria-hidden", "false");
-      };
-      const showOverlayFromMermaid = async (content) => {
-        if (!overlay || !overlayMermaid) {
-          return;
-        }
-        const { svg } = await mermaid.render(`expanded-${Date.now()}`, content);
-        showOverlayWithSvg(svg);
-      };
+      mermaid.initialize({ startOnLoad: true, theme: "dark" }); const search =
+      document.getElementById("search"); const nav = document.getElementById("nav"); const cards =
+      document.getElementById("cards"); const overlay = document.getElementById("overlay"); const
+      overlayClose = document.getElementById("overlay-close"); const overlayMermaid =
+      document.getElementById("overlay-mermaid"); const filter = () => { const value =
+      (search?.value || "").toLowerCase(); const links = nav?.querySelectorAll("a") || []; const
+      sections = cards?.querySelectorAll("section") || []; links.forEach((link) => { const text =
+      link.textContent?.toLowerCase() || ""; const show = text.includes(value);
+      link.parentElement.style.display = show ? "" : "none"; }); sections.forEach((section) => {
+      const text = section.textContent?.toLowerCase() || ""; section.style.display =
+      text.includes(value) ? "" : "none"; }); }; if (search) { search.addEventListener("input",
+      filter); } const showOverlayWithSvg = (svgMarkup) => { if (!overlay || !overlayMermaid) {
+      return; } overlayMermaid.innerHTML = svgMarkup; overlay.classList.remove("hidden");
+      overlay.setAttribute("aria-hidden", "false"); }; const showOverlayFromMermaid = async
+      (content) => { if (!overlay || !overlayMermaid) { return; } const { svg } = await
+      mermaid.render(`expanded-${Date.now()}`, content); showOverlayWithSvg(svg); };
       document.querySelectorAll("[data-expand]").forEach((button) => {
-        button.addEventListener("click", () => {
-          const svg = button.querySelector("svg");
-          if (svg?.outerHTML) {
-            showOverlayWithSvg(svg.outerHTML);
-            return;
-          }
-          const content = button.dataset.mermaid ? decodeURIComponent(button.dataset.mermaid) : "";
-          if (content) {
-            void showOverlayFromMermaid(content);
-          }
-        });
-      });
-      const hideOverlay = () => {
-        if (!overlay) {
-          return;
-        }
-        overlay.classList.add("hidden");
-        overlay.setAttribute("aria-hidden", "true");
-      };
-      overlay?.addEventListener("click", (event) => {
-        if (event.target === overlay) {
-          hideOverlay();
-        }
-      });
-      overlayClose?.addEventListener("click", hideOverlay);
-
-      const formatValue = (value) => {
-        if (value === undefined) {
-          return "—";
-        }
-        if (typeof value === "string") {
-          return `"${value}"`;
-        }
-        try {
-          return JSON.stringify(value);
-        } catch {
-          return String(value);
-        }
-      };
-      const formatFacts = (value) => {
-        if (value === undefined) {
-          return "—";
-        }
-        try {
-          return JSON.stringify(value, null, 2);
-        } catch {
-          return String(value);
-        }
-      };
-      const statusClass = (result) =>
-        result
-          ? "border-emerald-500/40 text-emerald-200"
-          : "border-rose-500/40 text-rose-200";
-
-
-      const renderCondition = (container, condition, depth) => {
-        const row = document.createElement("div");
-        row.className =
-          "rounded-xl border border-neutral-800 bg-neutral-950/70 px-3 py-2 text-xs text-neutral-200";
-        row.style.marginLeft = `${depth * 12}px`;
-
-        const header = document.createElement("div");
-        header.className = "flex flex-wrap items-center justify-between gap-2";
-
-        const title = document.createElement("div");
-        title.className = "font-semibold text-neutral-100";
-        title.textContent = condition.label || "condition";
-
-        const badge = document.createElement("span");
-        badge.className = `rounded-full border px-2 py-0.5 text-[10px] uppercase tracking-[0.2em] ${statusClass(
-          condition.result,
-        )}`;
-        badge.textContent = condition.result ? "pass" : "fail";
-
-        header.appendChild(title);
-        header.appendChild(badge);
-        row.appendChild(header);
-
-        if (condition.reasonCode) {
-          const reason = document.createElement("div");
-          reason.className = "mt-1 text-[11px] text-neutral-400";
-          reason.textContent = `Reason: ${condition.reasonCode}`;
-          row.appendChild(reason);
-        }
-
-        if (condition.left !== undefined || condition.op || condition.right !== undefined) {
-          const detail = document.createElement("div");
-          detail.className = "mt-1 font-mono text-[11px] text-neutral-300";
-          detail.textContent = `${formatValue(condition.left)} ${condition.op || ""} ${formatValue(
-            condition.right,
-          )}`.trim();
-          row.appendChild(detail);
-        }
-
-        container.appendChild(row);
-
-        if (condition.children && condition.children.length > 0) {
-          condition.children.forEach((child) => renderCondition(container, child, depth + 1));
-        }
-      };
-
-      const renderRuleRow = (container, rule, index) => {
-        const wrapper = document.createElement("div");
-        wrapper.className = "rounded-xl border border-neutral-800 bg-neutral-950/70 p-3";
-
-        const header = document.createElement("div");
-        header.className = "flex flex-wrap items-center justify-between gap-2";
-
-        const title = document.createElement("div");
-        title.className = "text-sm font-semibold text-neutral-100";
-        title.textContent = `${index + 1}. ${rule.ruleId}`;
-
-        const status = document.createElement("span");
-        status.className =
-          "rounded-full border px-2 py-0.5 text-[10px] uppercase tracking-[0.2em]";
-        if (rule.skippedReason) {
-          status.textContent = `skipped (${rule.skippedReason})`;
-          status.classList.add("border-amber-500/40", "bg-amber-500/10", "text-amber-200");
-        } else if (rule.matched) {
-          status.textContent = "matched";
-          status.classList.add("border-emerald-500/40", "bg-emerald-500/10", "text-emerald-200");
-        } else {
-          status.textContent = "not matched";
-          status.classList.add("border-rose-500/40", "bg-rose-500/10", "text-rose-200");
-        }
-
-        header.appendChild(title);
-        header.appendChild(status);
-        wrapper.appendChild(header);
-
-        const meta = document.createElement("div");
-        meta.className = "mt-1 text-xs text-neutral-500";
-        const tags = rule.meta?.tags?.length ? `Tags: ${rule.meta.tags.join(", ")}` : "";
-        const reason = rule.meta?.reasonCode ? `Reason: ${rule.meta.reasonCode}` : "";
-        const duration = rule.durationMs ? `${rule.durationMs}ms` : "";
-        const parts = [tags, reason, duration].filter(Boolean);
-        meta.textContent = parts.length ? parts.join(" • ") : "No metadata";
-        wrapper.appendChild(meta);
-
-        if (rule.conditions?.length) {
-          const conditionsHeader = document.createElement("div");
-          conditionsHeader.className =
-            "mt-3 text-[10px] uppercase tracking-[0.3em] text-neutral-400";
-          conditionsHeader.textContent = "Conditions";
-          wrapper.appendChild(conditionsHeader);
-
-          const conditions = document.createElement("div");
-          conditions.className = "mt-2 space-y-2";
-          rule.conditions.forEach((condition) => renderCondition(conditions, condition, 0));
-          wrapper.appendChild(conditions);
-        }
-
-        if (rule.notes?.length) {
-          const notesHeader = document.createElement("div");
-          notesHeader.className =
-            "mt-3 text-[10px] uppercase tracking-[0.3em] text-neutral-400";
-          notesHeader.textContent = "Notes";
-          wrapper.appendChild(notesHeader);
-
-          const notes = document.createElement("ul");
-          notes.className = "mt-2 space-y-1 text-xs text-neutral-300";
-          rule.notes.forEach((note) => {
-            const li = document.createElement("li");
-            li.textContent = note;
-            notes.appendChild(li);
-          });
-          wrapper.appendChild(notes);
-        }
-
-        container.appendChild(wrapper);
-      };
-
-      const renderTraceRow = (row) => {
-        const body = row.querySelector("[data-trace-row-body]");
-        if (!body || body.childElementCount > 0) {
-          return;
-        }
-        let trace = null;
-        try {
-          trace = JSON.parse(decodeURIComponent(row.dataset.trace || ""));
-        } catch {
-          return;
-        }
-
-        const inputHeader = document.createElement("div");
-        inputHeader.className = "flex items-center justify-between";
-        const inputTitle = document.createElement("div");
-        inputTitle.className = "text-xs uppercase tracking-[0.3em] text-neutral-400";
-        inputTitle.textContent = "Input";
-        const copyBtn = document.createElement("button");
-        copyBtn.type = "button";
-        copyBtn.className =
-          "rounded-full border border-neutral-700 bg-neutral-950/80 px-2 py-0.5 text-[11px] text-neutral-300 hover:border-emerald-400";
-        copyBtn.textContent = "Copy";
-        inputHeader.appendChild(inputTitle);
-        inputHeader.appendChild(copyBtn);
-
-        const input = document.createElement("pre");
-        input.className =
-          "mt-2 overflow-auto rounded-lg border border-neutral-800 bg-neutral-950/80 p-3 font-mono text-[11px] text-neutral-200 shadow-[0_0_0_1px_rgba(16,185,129,0.05)]";
-        input.textContent = formatFacts(trace.facts);
-
-        copyBtn.addEventListener("click", () => {
-          navigator.clipboard?.writeText(input.textContent || "");
-        });
-
-        body.appendChild(inputHeader);
-        body.appendChild(input);
-
-        const rulesHeader = document.createElement("div");
-        rulesHeader.className = "text-xs uppercase tracking-[0.3em] text-neutral-400";
-        rulesHeader.textContent = "Rule evaluations";
-        body.appendChild(rulesHeader);
-
-        const rulesList = document.createElement("div");
-        rulesList.className = "space-y-3";
-        trace.trace.forEach((rule, index) => renderRuleRow(rulesList, rule, index));
-        body.appendChild(rulesList);
-      };
-
-      const initTraceRows = (card) => {
-        const rows = card.querySelectorAll("[data-trace-row]");
-        rows.forEach((row) => {
-          row.addEventListener("toggle", () => {
-            if (row.open) {
-              renderTraceRow(row);
-            }
-          });
-        });
-      };
-
-      document.querySelectorAll("[data-trace-card]").forEach((card) => {
-        initTraceRows(card);
-      });
+      button.addEventListener("click", () => { const svg = button.querySelector("svg"); if
+      (svg?.outerHTML) { showOverlayWithSvg(svg.outerHTML); return; } const content =
+      button.dataset.mermaid ? decodeURIComponent(button.dataset.mermaid) : ""; if (content) { void
+      showOverlayFromMermaid(content); } }); }); const hideOverlay = () => { if (!overlay) { return;
+      } overlay.classList.add("hidden"); overlay.setAttribute("aria-hidden", "true"); };
+      overlay?.addEventListener("click", (event) => { if (event.target === overlay) { hideOverlay();
+      } }); overlayClose?.addEventListener("click", hideOverlay); const formatValue = (value) => {
+      if (value === undefined) { return "—"; } if (typeof value === "string") { return `"${value}"`;
+      } try { return JSON.stringify(value); } catch { return String(value); } }; const formatFacts =
+      (value) => { if (value === undefined) { return "—"; } try { return JSON.stringify(value, null,
+      2); } catch { return String(value); } }; const statusClass = (result) => result ?
+      "border-emerald-500/40 text-emerald-200" : "border-rose-500/40 text-rose-200"; const
+      renderCondition = (container, condition, depth) => { const row =
+      document.createElement("div"); row.className = "rounded-xl border border-neutral-800
+      bg-neutral-950/70 px-3 py-2 text-xs text-neutral-200"; row.style.marginLeft = `${depth *
+      12}px`; const header = document.createElement("div"); header.className = "flex flex-wrap
+      items-center justify-between gap-2"; const title = document.createElement("div");
+      title.className = "font-semibold text-neutral-100"; title.textContent = condition.label ||
+      "condition"; const badge = document.createElement("span"); badge.className = `rounded-full
+      border px-2 py-0.5 text-[10px] uppercase tracking-[0.2em] ${statusClass( condition.result,
+      )}`; badge.textContent = condition.result ? "pass" : "fail"; header.appendChild(title);
+      header.appendChild(badge); row.appendChild(header); if (condition.reasonCode) { const reason =
+      document.createElement("div"); reason.className = "mt-1 text-[11px] text-neutral-400";
+      reason.textContent = `Reason: ${condition.reasonCode}`; row.appendChild(reason); } if
+      (condition.left !== undefined || condition.op || condition.right !== undefined) { const detail
+      = document.createElement("div"); detail.className = "mt-1 font-mono text-[11px]
+      text-neutral-300"; detail.textContent = `${formatValue(condition.left)} ${condition.op || ""}
+      ${formatValue( condition.right, )}`.trim(); row.appendChild(detail); }
+      container.appendChild(row); if (condition.children && condition.children.length > 0) {
+      condition.children.forEach((child) => renderCondition(container, child, depth + 1)); } };
+      const renderRuleRow = (container, rule, index) => { const wrapper =
+      document.createElement("div"); wrapper.className = "rounded-xl border border-neutral-800
+      bg-neutral-950/70 p-3"; const header = document.createElement("div"); header.className = "flex
+      flex-wrap items-center justify-between gap-2"; const title = document.createElement("div");
+      title.className = "text-sm font-semibold text-neutral-100"; title.textContent = `${index + 1}.
+      ${rule.ruleId}`; const status = document.createElement("span"); status.className =
+      "rounded-full border px-2 py-0.5 text-[10px] uppercase tracking-[0.2em]"; if
+      (rule.skippedReason) { status.textContent = `skipped (${rule.skippedReason})`;
+      status.classList.add("border-amber-500/40", "bg-amber-500/10", "text-amber-200"); } else if
+      (rule.matched) { status.textContent = "matched"; status.classList.add("border-emerald-500/40",
+      "bg-emerald-500/10", "text-emerald-200"); } else { status.textContent = "not matched";
+      status.classList.add("border-rose-500/40", "bg-rose-500/10", "text-rose-200"); }
+      header.appendChild(title); header.appendChild(status); wrapper.appendChild(header); const meta
+      = document.createElement("div"); meta.className = "mt-1 text-xs text-neutral-500"; const tags
+      = rule.meta?.tags?.length ? `Tags: ${rule.meta.tags.join(", ")}` : ""; const reason =
+      rule.meta?.reasonCode ? `Reason: ${rule.meta.reasonCode}` : ""; const duration =
+      rule.durationMs ? `${rule.durationMs}ms` : ""; const parts = [tags, reason,
+      duration].filter(Boolean); meta.textContent = parts.length ? parts.join(" • ") : "No
+      metadata"; wrapper.appendChild(meta); if (rule.conditions?.length) { const conditionsHeader =
+      document.createElement("div"); conditionsHeader.className = "mt-3 text-[10px] uppercase
+      tracking-[0.3em] text-neutral-400"; conditionsHeader.textContent = "Conditions";
+      wrapper.appendChild(conditionsHeader); const conditions = document.createElement("div");
+      conditions.className = "mt-2 space-y-2"; rule.conditions.forEach((condition) =>
+      renderCondition(conditions, condition, 0)); wrapper.appendChild(conditions); } if
+      (rule.notes?.length) { const notesHeader = document.createElement("div");
+      notesHeader.className = "mt-3 text-[10px] uppercase tracking-[0.3em] text-neutral-400";
+      notesHeader.textContent = "Notes"; wrapper.appendChild(notesHeader); const notes =
+      document.createElement("ul"); notes.className = "mt-2 space-y-1 text-xs text-neutral-300";
+      rule.notes.forEach((note) => { const li = document.createElement("li"); li.textContent = note;
+      notes.appendChild(li); }); wrapper.appendChild(notes); } container.appendChild(wrapper); };
+      const renderTraceRow = (row) => { const body = row.querySelector("[data-trace-row-body]"); if
+      (!body || body.childElementCount > 0) { return; } let trace = null; try { trace =
+      JSON.parse(decodeURIComponent(row.dataset.trace || "")); } catch { return; } const inputHeader
+      = document.createElement("div"); inputHeader.className = "flex items-center justify-between";
+      const inputTitle = document.createElement("div"); inputTitle.className = "text-xs uppercase
+      tracking-[0.3em] text-neutral-400"; inputTitle.textContent = "Input"; const copyBtn =
+      document.createElement("button"); copyBtn.type = "button"; copyBtn.className = "rounded-full
+      border border-neutral-700 bg-neutral-950/80 px-2 py-0.5 text-[11px] text-neutral-300
+      hover:border-emerald-400"; copyBtn.textContent = "Copy"; inputHeader.appendChild(inputTitle);
+      inputHeader.appendChild(copyBtn); const input = document.createElement("pre"); input.className
+      = "mt-2 overflow-auto rounded-lg border border-neutral-800 bg-neutral-950/80 p-3 font-mono
+      text-[11px] text-neutral-200 shadow-[0_0_0_1px_rgba(16,185,129,0.05)]"; input.textContent =
+      formatFacts(trace.facts); copyBtn.addEventListener("click", () => {
+      navigator.clipboard?.writeText(input.textContent || ""); }); body.appendChild(inputHeader);
+      body.appendChild(input); const rulesHeader = document.createElement("div");
+      rulesHeader.className = "text-xs uppercase tracking-[0.3em] text-neutral-400";
+      rulesHeader.textContent = "Rule evaluations"; body.appendChild(rulesHeader); const rulesList =
+      document.createElement("div"); rulesList.className = "space-y-3"; trace.trace.forEach((rule,
+      index) => renderRuleRow(rulesList, rule, index)); body.appendChild(rulesList); }; const
+      initTraceRows = (card) => { const rows = card.querySelectorAll("[data-trace-row]");
+      rows.forEach((row) => { row.addEventListener("toggle", () => { if (row.open) {
+      renderTraceRow(row); } }); }); };
+      document.querySelectorAll("[data-trace-card]").forEach((card) => { initTraceRows(card); });
     </script>
   </body>
 </html>

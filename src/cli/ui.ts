@@ -113,7 +113,9 @@ async function loadModules(paths: string[], cacheBust: number) {
   }
 }
 
-const isMain = import.meta.url === pathToFileURL(process.argv[1] ?? "").href;
+const isMain =
+  typeof import.meta.url === "string" &&
+  import.meta.url === pathToFileURL(process.argv[1] ?? "").href;
 if (isMain) {
   const options = parseArgs(process.argv.slice(2));
   void startServer(options);
@@ -128,13 +130,20 @@ function loadTemplate() {
 }
 
 function resolveTemplatePath(): string | null {
-  const candidates = [
-    new URL("./ui-template.hbs", import.meta.url),
-    new URL("../../src/cli/ui-template.hbs", import.meta.url),
-  ];
+  const candidates: (string | URL)[] = [];
 
-  for (const url of candidates) {
-    const filePath = fileURLToPath(url);
+  if (typeof import.meta.url === "string") {
+    candidates.push(
+      new URL("./ui-template.hbs", import.meta.url),
+      new URL("../../src/cli/ui-template.hbs", import.meta.url),
+    );
+  } else {
+    // Fallback for CJS if necessary, though we prefer ESM for CLI
+    candidates.push(path.join(__dirname, "ui-template.hbs"));
+  }
+
+  for (const candidate of candidates) {
+    const filePath = typeof candidate === "string" ? candidate : fileURLToPath(candidate);
     if (fs.existsSync(filePath)) {
       return filePath;
     }

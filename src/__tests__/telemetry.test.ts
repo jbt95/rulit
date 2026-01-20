@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { Rules } from "../index";
+import { Rules, TelemetryAdapter } from "../";
 
 type Facts = { user: { age: number } };
 type Effects = { flags: string[] };
@@ -7,7 +7,7 @@ type Effects = { flags: string[] };
 describe("telemetry adapter", () => {
   it("emits spans for run, rule, and condition", () => {
     const spans: { name: string; attrs?: Record<string, unknown>; ended: boolean }[] = [];
-    const adapter: Rules.TelemetryAdapter = {
+    const adapter: TelemetryAdapter = {
       startSpan: (name, attributes) => {
         const span = { name, attrs: attributes, ended: false };
         spans.push(span);
