@@ -12,6 +12,89 @@ When business rules live as scattered `if/else` chains, they become hard to read
 hard to change, and risky to refactor. This library centralizes decision logic,
 keeps it type-safe, and produces explainable traces so you can audit outcomes.
 
+### The "Spaghetti" Reality
+
+Imagine a typical insurance discount system. In traditional code, it often looks like this:
+
+```ts
+function calculateDiscount(user, cart) {
+  let discount = 0;
+
+  if (user.isPremium) {
+    if (user.age > 60) {
+      discount = 20;
+    } else if (cart.total > 1000) {
+      discount = 15;
+    } else {
+      discount = 10;
+    }
+  } else if (user.age < 25 && cart.items.some((i) => i.category === "education")) {
+    discount = 5;
+  } else if (cart.total > 500) {
+    if (user.region === "EU") {
+      discount = 7;
+    } else {
+      discount = 3;
+    }
+  }
+
+  // Why did the user get 7%? Good luck finding out in the logs
+  // without adding console.log everywhere.
+  return discount;
+}
+```
+
+### The Rulit Way
+
+With Rulit, the same logic becomes declarative, type-safe, and **explainable**.
+
+```ts
+import { Rules } from "rulit";
+
+const discountRules = Rules.ruleset<Facts, Effects>("discounts")
+  .rule("Premium Senior")
+  .when(Rules.condition().field("user.isPremium").eq(true))
+  .and(Rules.condition().field("user.age").gt(60))
+  .then(({ effects }) => {
+    effects.discount = 20;
+  })
+  .end()
+
+  .rule("Premium Bulk")
+  .when(Rules.condition().field("user.isPremium").eq(true))
+  .and(Rules.condition().field("cart.total").gt(1000))
+  .then(({ effects }) => {
+    effects.discount = 15;
+  })
+  .end()
+
+  .rule("Education Student")
+  .when(Rules.condition().field("user.age").lt(25))
+  .and(
+    Rules.condition()
+      .field("cart.items")
+      .some((i) => i.category === "education"),
+  )
+  .then(({ effects }) => {
+    effects.discount = 5;
+  })
+  .end()
+
+  .rule("EU Regional")
+  .when(Rules.condition().field("cart.total").gt(500))
+  .and(Rules.condition().field("user.region").eq("EU"))
+  .then(({ effects }) => {
+    effects.discount = 7;
+  })
+  .end()
+  .build();
+
+const { effects, trace } = discountRules.run(facts);
+
+// trace.fired tells you exactly which rule matched and why.
+console.log(`Discount: ${effects.discount}% because: ${trace.fired[0].ruleName}`);
+```
+
 ## When to use
 
 Use Rulit when you need:
